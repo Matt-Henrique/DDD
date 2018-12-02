@@ -1,0 +1,101 @@
+﻿@model Invoisys.Infrastructure.CrossCutting.Identity.Model.RegisterViewModel
+@{
+    ViewBag.Title = "Novo Usuário";
+}
+<div>
+    <div>
+        <h2>Cadastro de <strong>Usuários</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>
+                    <a href="~/UsersAdmin">Usuários</a>
+                </li>
+                <li>Cadastrar Usuário</li>
+            </ol>
+        </div>
+    </div>
+    @using (Html.BeginForm("Create", "UsersAdmin", null, FormMethod.Post, new { id = "formUser", role = "form", onsubmit = "return disabledButton();" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div>
+                <h3><strong>Dados do Usuário</strong></h3>
+            </div>
+            <div>
+                <div>
+                    <div>
+                        @Html.LabelFor(u => u.Name)
+                        @Html.TextBoxFor(u => u.Name, new { placeholder = "Nome Completo", required = "required", maxlength = "200", minlength = "3" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(u => u.Email)
+                        @Html.TextBoxFor(u => u.Email, new { placeholder = "mail@mail.com", required = "required", maxlength = "200", type = "email" })
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        @Html.LabelFor(u => u.PhoneNumber)
+                        @Html.TextBoxFor(u => u.PhoneNumber, new { placeholder = "(00) 00000-0000" })
+                    </div>
+                </div>
+                <div>
+                    @Html.LabelFor(u => u.RolesList)
+                    <div>
+                        @foreach (var item in Model.RolesList)
+                        {
+                            <label>
+                                <input type="checkbox" name="SelectedRole" id="@item.Value" value="@item.Value" checked="@item.Selected">
+                                @Html.Label(item.Value, new { })
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "UsersAdmin")'">Cancelar</button>
+                    <input id="btnSalvar" type="submit" value="Salvar" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script>
+        function applyMask() {
+            $("#PhoneNumber").mask("(99) 9999?9-9999");
+            $("#PhoneNumber").on("blur", function () {
+                var last = $(this).val().substr($(this).val().indexOf("-") + 1);
+                if (last.length === 3) {
+                    var move = $(this).val().substr($(this).val().indexOf("-") - 1, 1);
+                    var lastfour = move + last;
+                    var first = $(this).val().substr(0, 9);
+                    $(this).val(first + '-' + lastfour);
+                }
+            });
+        }
+        jQuery(function ($) {
+            applyMask();
+        });
+        function disabledButton() {
+            $("#btnSalvar").prop("disabled", "disabled");
+            setTimeout(function () { $("#btnSalvar").prop("disabled", ""); }, 5000);
+        }
+        @if (@ViewData.ModelState.Values.Select(m => m.Errors).Any())
+        {
+            foreach (var erro in @ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
+            {
+                <text>
+                    setTimeout(function () {
+                        alert(@Html.Raw(Json.Encode(erro[0].ErrorMessage)));
+                    }, 100);
+                </text>
+            }
+        }
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

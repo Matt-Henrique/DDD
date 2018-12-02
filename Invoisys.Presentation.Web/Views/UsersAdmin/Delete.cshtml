@@ -1,0 +1,54 @@
+﻿@model Invoisys.Infrastructure.CrossCutting.Identity.Model.ApplicationUser
+@{
+    ViewBag.Title = "Excluir Usuário";
+}
+<div>
+    <div>
+        <h2>Exclusão de <strong>Usuários</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>
+                    <a href="~/UsersAdmin">Usuários</a>
+                </li>
+                <li>Excluir Usuário</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <div>
+                    <h3><strong>Dados do Usuário</strong></h3>
+                </div>
+                <div>
+                    <div>
+                        <h4>Você tem certeza que deseja excluir o usuário: <b>@Html.DisplayFor(u => u.Name)</b></h4>
+                        <hr />
+                    </div>
+                </div>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <div>
+                            <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "UsersAdmin")'">Cancelar</button>
+                            <input id="btnExcluir" type="submit" value="Excluir" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script language="javascript" type="text/javascript">
+        $("form").submit(function () {
+            document.getElementById('btnExcluir').disabled = 1;
+        });
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

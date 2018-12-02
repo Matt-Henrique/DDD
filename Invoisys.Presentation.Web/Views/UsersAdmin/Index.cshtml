@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Invoisys.Infrastructure.CrossCutting.Identity.Model.ApplicationUser>
+@{
+    ViewBag.Title = "Usuários";
+}
+<div>
+    <div>
+        <h2>Listagem de <strong>Usuário</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>Usuários</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <h3>
+                    <strong>Gerenciamento de </strong>Usuário
+                </h3>
+                <div>
+                    <button type="button" title="Novo" onclick="location.href='@Url.Action("Create", "UsersAdmin")'">Novo</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table id="tblUser" cellspacing="0" style="width: 100%;">
+                <thead>
+                    <tr style="text-align: left;">
+                        <th>NOME</th>
+                        <th>E-MAIL</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td>
+                                <a href="#" onclick="resetarToken('@item.Id');">Resetar Token</a>
+                                <a href="@Url.Action("Edit", "UsersAdmin", new { id = item.Id })">Editar</a>
+                                <a href="@Url.Action("Delete", "UsersAdmin", new { id = item.Id })">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script language="javascript" type="text/javascript">
+        function resetarToken(userId) {
+            var parameter = JSON.stringify({
+                id: userId
+            });
+            $.ajax({
+                url: '@Url.Action("ResetToken", "UsersAdmin")',
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: parameter,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function(data) {
+                    alert(data);
+                }
+            });
+        }
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

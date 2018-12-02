@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Perfis";
+}
+<div>
+    <div>
+        <h2>Listagem de <strong>Perfis</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>Perfis</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <h3><strong>Gerenciamento de </strong>Perfil</h3>
+                <div>
+                    <button type="button" title="Novo" onclick="location.href='@Url.Action("Create", "RolesAdmin")'">Novo</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table id="tblRole" cellspacing="0" style="width: 100%;">
+                <thead>
+                    <tr style="text-align: left;">
+                        <th>NOME</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>
+                                <a href="@Url.Action("Details", "RolesAdmin", new { id = item.Id })">Detalhes</a>
+                                <a href="@Url.Action("Edit", "RolesAdmin", new { id = item.Id })">Editar</a>
+                                <a href="@Url.Action("Delete", "RolesAdmin", new { id = item.Id })">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <!-- END PAGE SCRIPTS -->
+}

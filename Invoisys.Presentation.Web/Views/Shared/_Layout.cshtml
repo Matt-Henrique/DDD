@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Invoisys Sistemas</title>
+    <!-- CUSTOM PAGINATION -->
+    <link href="~/Images/invoiSys.ico" rel="shortcut icon" type="image/png">
+    <link href="~/Content/site.css" rel="stylesheet" />
+</head>
+<!-- BEGIN BODY -->
+<body>
+    <section>
+        <!-- BEGIN SIDEBAR -->
+        <div>
+            <div>
+                <h1>
+                    <a href="~/Home"></a>
+                </h1>
+            </div>
+            <div>
+                <div>
+                    <span>Menu</span>
+                </div>
+                @{
+                    if (Request.IsAuthenticated)
+                    {
+                        <ul>
+                            <li>
+                                <a href="~/Home"><span>Home</span></a>
+                            </li>
+                            @{
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="#"><span>Usuário</span></a>
+                                        <ul>
+                                            <li><a href="~/UsersAdmin"> Usuários</a></li>
+                                            <li><a href="~/RolesAdmin"> Perfis</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                }
+            </div>
+        </div>
+        <!-- END SIDEBAR -->
+        <div>
+            <!-- BEGIN TOPBAR -->
+            <div>
+                <div>
+                    <div>
+                        <span>Menu</span>
+                    </div>
+                </div>
+                <div>
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <ul>
+                            <li>
+                                <a href="#"><span>@User.Identity.Name</span></a>
+                                <ul>
+                                    <li><a href="~/Account/ChangePassword"><span>Alterar Senha</span></a></li>
+                                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><span>Sair</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+            <!-- END TOPBAR -->
+            <!-- BEGIN PAGE CONTENT -->
+            @RenderBody()
+        </div>
+        <!-- END PAGE CONTENT -->
+    </section>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

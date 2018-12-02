@@ -1,0 +1,51 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+@{
+    ViewBag.Title = "Excluir Perfil";
+}
+<div>
+    <div>
+        <h2>Exclusão de <strong>Perfis</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>
+                    <a href="~/RolesAdmin">Perfis</a>
+                </li>
+                <li>Cadastrar Perfil</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <h3><strong>Excluir </strong> Perfil</h3>
+        </div>
+        <div>
+            <div>
+                <h4>Você tem certeza que deseja excluir o perfil: <b>@Html.DisplayFor(r => r.Name)</b></h4>
+                <hr />
+                <p>Excluindo, removerá todos os usuários deste perfil, mas não excluirá os usuários.</p>
+            </div>
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div>
+                <div>
+                    <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "RolesAdmin")'">Cancelar</button>
+                    <input id="btnExcluir" type="submit" value="Excluir" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script language="javascript" type="text/javascript">
+        $("form").submit(function () {
+            document.getElementById('btnExcluir').disabled = 1;
+        });
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

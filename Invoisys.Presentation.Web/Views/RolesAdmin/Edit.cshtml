@@ -1,0 +1,64 @@
+﻿@model Invoisys.Infrastructure.CrossCutting.Identity.Model.RoleViewModel
+@{
+    ViewBag.Title = "Editar Perfil";
+}
+<div>
+    <div>
+        <h2>Edição de <strong>Perfis</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>
+                    <a href="~/RolesAdmin">Perfis</a>
+                </li>
+                <li>Editar Perfil</li>
+            </ol>
+        </div>
+    </div>
+    @using (Html.BeginForm("Edit", "RolesAdmin", FormMethod.Post, new { id = "formPerfil", role = "form", onsubmit = "return disabledButton();" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div>
+                <h3><strong>Editar </strong> Perfil</h3>
+            </div>
+            <div>
+                <div>
+                    <div>
+                        @Html.LabelFor(r => r.Name)
+                        @Html.TextBoxFor(r => r.Name, new { placeholder = "Administrador", required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "RolesAdmin")'">Cancelar</button>
+                    <input id="btnSalvar" type="submit" value="Salvar" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script language="javascript" type="text/javascript">
+        function disabledButton() {
+            $("#btnSalvar").prop("disabled", "disabled");
+            setTimeout(function () { $("#btnSalvar").prop("disabled", ""); }, 5000);
+        }
+        @if (@ViewData.ModelState.Values.Select(m => m.Errors).Any())
+        {
+            foreach (var erro in @ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
+            {
+                <text>
+                    setTimeout(function () {
+                        alert(@Html.Raw(Json.Encode(erro[0].ErrorMessage)));
+                    }, 100);
+                </text>
+            }
+        }
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

@@ -1,0 +1,67 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+@{
+    ViewBag.Title = "Detalhes do Perfil";
+}
+<div>
+    <div>
+        <h2>Detalhamento de <strong>Perfis</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="~/Home">Home</a>
+                </li>
+                <li>
+                    <a href="~/RolesAdmin">Perfis</a>
+                </li>
+                <li>Detalhes do Perfil</li>
+            </ol>
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div>
+                <h3><strong>Dados do Perfil</strong></h3>
+            </div>
+            <div>
+                <div>
+                    <h4>Lista de usuários com o perfil: <b>@Html.DisplayFor(m => m.Name)</b></h4>
+                    @if (ViewBag.UserCount == 0)
+                    {
+                        <hr />
+                        <p>Nenhum usuário foi encontrado com este perfil.</p>
+                    }
+                    else
+                    {
+                        <div>
+                            <table id="tblUsers" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>E-MAIL</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.Users)
+                                    {
+                                        <tr>
+                                            <td>@item.UserName</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "UsersAdmin", new { id = (item.Id) })">Detalhes</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <!-- END PAGE SCRIPTS -->
+}
