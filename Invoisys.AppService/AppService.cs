@@ -36,9 +36,9 @@ namespace Invoisys.AppService
         {
             return _serviceApp.GetAll();
         }
-        public TEntity GetById(int Id)
+        public TEntity GetById(int id)
         {
-            return _serviceApp.GetById(Id);
+            return _serviceApp.GetById(id);
         }
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> exp)
         {
@@ -52,11 +52,8 @@ namespace Invoisys.AppService
         }
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                if (_uow != null)
-                    _uow.Dispose();
-            }
+            if (!disposing) return;
+            _uow?.Dispose();
         }
     }
 }

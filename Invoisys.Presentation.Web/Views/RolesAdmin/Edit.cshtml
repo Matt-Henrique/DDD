@@ -8,10 +8,10 @@
         <div>
             <ol>
                 <li>
-                    <a href="~/Home">Home</a>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
                 </li>
                 <li>
-                    <a href="~/RolesAdmin">Perfis</a>
+                    <a href="@Url.Action("Index", "RolesAdmin")">Perfis</a>
                 </li>
                 <li>Editar Perfil</li>
             </ol>
@@ -48,9 +48,9 @@
             $("#btnSalvar").prop("disabled", "disabled");
             setTimeout(function () { $("#btnSalvar").prop("disabled", ""); }, 5000);
         }
-        @if (@ViewData.ModelState.Values.Select(m => m.Errors).Any())
+        @if (ViewData.ModelState.Values.Select(m => m.Errors).Any())
         {
-            foreach (var erro in @ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
+            foreach (var erro in ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
             {
                 <text>
                     setTimeout(function () {

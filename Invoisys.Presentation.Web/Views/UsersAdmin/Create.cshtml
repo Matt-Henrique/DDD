@@ -8,10 +8,10 @@
         <div>
             <ol>
                 <li>
-                    <a href="~/Home">Home</a>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
                 </li>
                 <li>
-                    <a href="~/UsersAdmin">Usuários</a>
+                    <a href="@Url.Action("Index", "UsersAdmin")">Usuários</a>
                 </li>
                 <li>Cadastrar Usuário</li>
             </ol>
@@ -78,16 +78,16 @@
                 }
             });
         }
-        jQuery(function ($) {
+        jQuery(function () {
             applyMask();
         });
         function disabledButton() {
             $("#btnSalvar").prop("disabled", "disabled");
             setTimeout(function () { $("#btnSalvar").prop("disabled", ""); }, 5000);
         }
-        @if (@ViewData.ModelState.Values.Select(m => m.Errors).Any())
+        @if (ViewData.ModelState.Values.Select(m => m.Errors).Any())
         {
-            foreach (var erro in @ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
+            foreach (var erro in ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
             {
                 <text>
                     setTimeout(function () {

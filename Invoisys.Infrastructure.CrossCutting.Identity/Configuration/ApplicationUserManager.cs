@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using System;
 
-namespace Invoisys.Infrastructure.CrossCutting.Identity
+namespace Invoisys.Infrastructure.CrossCutting.Identity.Configuration
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {

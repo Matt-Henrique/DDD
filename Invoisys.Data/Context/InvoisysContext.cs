@@ -20,29 +20,30 @@ namespace Invoisys.Infrastructure.Data.Context
             modelBuilder.Configurations.Add(new UserConfig());
             modelBuilder.Ignore<User>();
             modelBuilder.Properties()
-                .Where(p => p.Name == p.ReflectedType.Name + "Id")
+                .Where(p => p.Name == p.ReflectedType?.Name + "Id")
                 .Configure(p => p.IsKey());
             modelBuilder.Properties()
-                .Where(p => p.Name == p.ReflectedType.Name + "CreateDate")
+                .Where(p => p.Name == p.ReflectedType?.Name + "CreateDate")
                 .Configure(p => p.IsRequired());
             modelBuilder.Properties<string>()
                 .Configure(p => p.HasColumnType("varchar"));
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
+        /// <inheritdoc />
         /// <summary>
         /// Override SaveChanges method in InvoisysContext and get a list of Added and Modified of your entity and if it is added set CreatedDate and if it is modified set ModifiedDate.
         /// </summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state when SaveChanges was called</returns>
         public override int SaveChanges()
         {
-            var AddedEntities = ChangeTracker.Entries<EntityBase>().Where(e => e.State == EntityState.Added).ToList();
-            AddedEntities.ForEach(e =>
+            var addedEntities = ChangeTracker.Entries<EntityBase>().Where(e => e.State == EntityState.Added).ToList();
+            addedEntities.ForEach(e =>
             {
                 e.Entity.SetCreated();
             });
-            var ModifiedEntities = ChangeTracker.Entries<EntityBase>().Where(e => e.State == EntityState.Modified).ToList();
-            ModifiedEntities.ForEach(e =>
+            var modifiedEntities = ChangeTracker.Entries<EntityBase>().Where(e => e.State == EntityState.Modified).ToList();
+            modifiedEntities.ForEach(e =>
             {
                 // Ignore changes to the value of CreateDate
                 e.Property("CreateDate").IsModified = false;

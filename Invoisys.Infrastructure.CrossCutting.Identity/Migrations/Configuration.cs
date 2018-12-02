@@ -1,7 +1,7 @@
 namespace Invoisys.Infrastructure.CrossCutting.Identity.Migrations
 {
-    using Invoisys.Infrastructure.CrossCutting.Identity.Context;
-    using Invoisys.Infrastructure.CrossCutting.Identity.Model;
+    using Context;
+    using Model;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System.Data.Entity.Migrations;
@@ -22,21 +22,19 @@ namespace Invoisys.Infrastructure.CrossCutting.Identity.Migrations
                 var role = new IdentityRole("Admin");
                 roleManager.Create(role);
             }
-            if (!context.Users.Any(u => u.Email.Equals("mateus.tofanello@outlook.com")))
+            if (context.Users.Any(u => u.Email.Equals("mateus.tofanello@outlook.com"))) return;
+            var passwordHash = new PasswordHasher();
+            var user = new ApplicationUser
             {
-                var passwordHash = new PasswordHasher();
-                var user = new ApplicationUser
-                {
-                    EmailConfirmed = true,
-                    ChangePassword = false,
-                    Name = "Mateus Henrique Tofanello",
-                    Email = "mateus.tofanello@outlook.com",
-                    UserName = "mateus.tofanello@outlook.com",
-                    PasswordHash = passwordHash.HashPassword("123Mudar")
-                };
-                userManager.Create(user);
-                userManager.AddToRole(user.Id, "Admin");
-            }
+                EmailConfirmed = true,
+                ChangePassword = false,
+                Name = "Mateus Henrique Tofanello",
+                Email = "mateus.tofanello@outlook.com",
+                UserName = "mateus.tofanello@outlook.com",
+                PasswordHash = passwordHash.HashPassword("123Mudar")
+            };
+            userManager.Create(user);
+            userManager.AddToRole(user.Id, "Admin");
         }
     }
 }

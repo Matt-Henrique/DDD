@@ -9,15 +9,10 @@ namespace Invoisys.Infrastructure.Data.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private InvoisysContext _context;
-        public InvoisysContext Context
-        {
-            get { return _context; }
-            set { _context = value; }
-        }
+        public InvoisysContext Context { get; set; }
         public Repository(InvoisysContext context)
         {
-            _context = context;
+            Context = context;
         }
         public void Add(TEntity obj)
         {
@@ -35,9 +30,9 @@ namespace Invoisys.Infrastructure.Data.Repository
         {
             return Context.Set<TEntity>();
         }
-        public TEntity GetById(int Id)
+        public TEntity GetById(int id)
         {
-            return Context.Set<TEntity>().Find(Id);
+            return Context.Set<TEntity>().Find(id);
         }
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> exp)
         {

@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -16,7 +15,7 @@
         <div>
             <div>
                 <h1>
-                    <a href="~/Home"></a>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
                 </h1>
             </div>
             <div>
@@ -28,7 +27,7 @@
                     {
                         <ul>
                             <li>
-                                <a href="~/Home"><span>Home</span></a>
+                                <a href="@Url.Action("Index", "Home")">Home</a>
                             </li>
                             @{
                                 if (User.IsInRole("Admin"))
@@ -36,8 +35,8 @@
                                     <li>
                                         <a href="#"><span>Usuário</span></a>
                                         <ul>
-                                            <li><a href="~/UsersAdmin"> Usuários</a></li>
-                                            <li><a href="~/RolesAdmin"> Perfis</a></li>
+                                            <li><a href="@Url.Action("Index", "UsersAdmin")"> Usuários</a></li>
+                                            <li><a href="@Url.Action("Index", "RolesAdmin")"> Perfis</a></li>
                                         </ul>
                                     </li>
                                 }
@@ -64,7 +63,7 @@
                             <li>
                                 <a href="#"><span>@User.Identity.Name</span></a>
                                 <ul>
-                                    <li><a href="~/Account/ChangePassword"><span>Alterar Senha</span></a></li>
+                                    <li><a href="@Url.Action("ChangePassword", "Account")"><span>Alterar Senha</span></a></li>
                                     <li><a href="javascript:document.getElementById('logoutForm').submit()"><span>Sair</span></a></li>
                                 </ul>
                             </li>

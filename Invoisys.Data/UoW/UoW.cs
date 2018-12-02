@@ -8,14 +8,14 @@ namespace Invoisys.Infrastructure.Data.UoW
     public class UoW : IDisposable, IUoW
     {
         private bool _disposed;
-        private InvoisysContext _context;
+        private readonly InvoisysContext _context;
         public UoW(InvoisysContext context)
         {
             _context = context;
         }
         public void Commit()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 _context.SaveChanges();
                 scope.Complete();

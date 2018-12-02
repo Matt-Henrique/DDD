@@ -10,7 +10,7 @@ namespace Invoisys.AppService.Interface
         void Add(TEntity obj);
         void Delete(TEntity obj);
         void Edit(TEntity obj);
-        TEntity GetById(int Id);
+        TEntity GetById(int id);
         IEnumerable<TEntity> GetAll();
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> exp);
         void Dispose();

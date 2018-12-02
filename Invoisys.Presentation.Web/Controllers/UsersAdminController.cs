@@ -1,4 +1,4 @@
-﻿using Invoisys.Infrastructure.CrossCutting.Identity;
+﻿using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
 using Invoisys.Infrastructure.CrossCutting.Identity.AccessDenied;
 using Invoisys.Infrastructure.CrossCutting.Identity.Model;
 using Microsoft.AspNet.Identity;
@@ -44,29 +44,26 @@ namespace Invoisys.Presentation.Web.Controllers
         public async Task<ActionResult> Create(RegisterViewModel model, params string[] selectedRole)
         {
             model.RolesList = _roleManager.Roles.ToList().Select(x => new SelectListItem() { Text = x.Name, Value = x.Name });
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            model.Password = _userManager.PasswordDefault();
+            var user = new ApplicationUser { ChangePassword = true, EmailConfirmed = true, Name = model.Name.Trim(), UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
             {
-                model.Password = _userManager.PasswordDefault();
-                var user = new ApplicationUser { ChangePassword = true, EmailConfirmed = true, Name = model.Name.Trim(), UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
-                    //await _userManager.SendEmailAsync(user.Id, "Usuário Cadastrado", html);
-                    selectedRole = selectedRole ?? new string[] { };
-                    var rolesAdded = await _userManager.AddToRolesAsync(user.Id, selectedRole.ToArray());
-                    return RedirectToAction("Index");
-                }
-                AddErrors(result);
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url?.Scheme);
+                await _userManager.SendEmailAsync(user.Id, "Usuário Cadastrado", callbackUrl);
+                selectedRole = selectedRole ?? new string[] { };
+                await _userManager.AddToRolesAsync(user.Id, selectedRole.ToArray());
+                return RedirectToAction("Index");
             }
+            AddErrors(result);
             return View(model);
         }
         [Authorize]
         public async Task<ActionResult> Details(string id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var user = await _userManager.FindByIdAsync(id);
             ViewBag.RoleNames = await _userManager.GetRolesAsync(user.Id);
             return View(user);
@@ -74,11 +71,9 @@ namespace Invoisys.Presentation.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Edit(string id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-                return HttpNotFound();
+            if (user == null) return HttpNotFound();
             var userRoles = await _userManager.GetRolesAsync(user.Id);
             return View(new UsersRoleViewModel()
             {
@@ -106,37 +101,31 @@ namespace Invoisys.Presentation.Web.Controllers
                 Text = x.Name,
                 Value = x.Name
             });
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(editUser);
+            var user = await _userManager.FindByIdAsync(editUser.Id);
+            if (user == null)
+                return HttpNotFound();
+            user.Name = editUser.Name.Trim();
+            user.UserName = editUser.Email;
+            user.Email = editUser.Email;
+            user.PhoneNumber = editUser.PhoneNumber;
+            selectedRole = selectedRole ?? new string[] { };
+            var result = await _userManager.AddToRolesAsync(user.Id, selectedRole.Except(userRoles).ToArray());
+            if (!result.Succeeded)
             {
-                var user = await _userManager.FindByIdAsync(editUser.Id);
-                if (user == null)
-                    return HttpNotFound();
-                user.Name = editUser.Name.Trim();
-                user.UserName = editUser.Email;
-                user.Email = editUser.Email;
-                user.PhoneNumber = editUser.PhoneNumber;
-                selectedRole = selectedRole ?? new string[] { };
-                var result = await _userManager.AddToRolesAsync(user.Id, selectedRole.Except(userRoles).ToArray());
-                if (!result.Succeeded)
-                {
-                    AddErrors(result);
-                    return View(editUser);
-                }
-                result = await _userManager.RemoveFromRolesAsync(user.Id, userRoles.Except(selectedRole).ToArray());
-                if (!result.Succeeded)
-                    return View(editUser);
-                return RedirectToAction("Index");
+                AddErrors(result);
+                return View(editUser);
             }
-            return View(editUser);
+            result = await _userManager.RemoveFromRolesAsync(user.Id, userRoles.Except(selectedRole).ToArray());
+            if (!result.Succeeded) return View(editUser);
+            return RedirectToAction("Index");
         }
         [Authorize]
         public async Task<ActionResult> Delete(string id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-                return HttpNotFound();
+            if (user == null) return HttpNotFound();
             return View(user);
         }
         [HttpPost, ActionName("Delete")]
@@ -144,21 +133,13 @@ namespace Invoisys.Presentation.Web.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            if (ModelState.IsValid)
-            {
-                if (id == null)
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                    return HttpNotFound();
-                var result = await _userManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                {
-                    ModelState.AddModelError("", result.Errors.First());
-                    return View();
-                }
-                return RedirectToAction("Index");
-            }
+            if (!ModelState.IsValid) return View();
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return HttpNotFound();
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded) return RedirectToAction("Index");
+            ModelState.AddModelError("", result.Errors.First());
             return View();
         }
         [HttpPost]
@@ -166,14 +147,11 @@ namespace Invoisys.Presentation.Web.Controllers
         public async Task<JsonResult> ResetToken(string id)
         {
             var user = _userManager.FindById(id);
-            if (user != null && user.ChangePassword)
-            {
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
-                //await _userManager.SendEmailAsync(user.Id, "Usuário Cadastrado", html);
-                return Json("Token resetado com sucesso, um novo e-mail foi enviado para o usuário");
-            }
-            return Json("Não é possível resetar o Token, o usuário já confirmou sua conta e alterou a senha");
+            if (user == null || !user.ChangePassword) return Json("Não é possível resetar o Token, o usuário já confirmou sua conta e alterou a senha");
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url?.Scheme);
+            await _userManager.SendEmailAsync(user.Id, "Usuário Cadastrado", callbackUrl);
+            return Json("Token resetado com sucesso, um novo e-mail foi enviado para o usuário");
         }
         private void AddErrors(IdentityResult result)
         {
@@ -181,10 +159,8 @@ namespace Invoisys.Presentation.Web.Controllers
             {
                 if (error.EndsWith("is already taken."))
                 {
-                    if (error.StartsWith("Name"))
-                        ModelState.Clear();
-                    else
-                        ModelState.AddModelError("", @"Este e-mail já está cadastrado, por favor informe outro");
+                    if (error.StartsWith("Name")) ModelState.Clear();
+                    else ModelState.AddModelError("", @"Este e-mail já está cadastrado, por favor informe outro");
                 }
                 else ModelState.AddModelError("", error);
             }

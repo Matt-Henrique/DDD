@@ -1,4 +1,4 @@
-﻿using Invoisys.Infrastructure.CrossCutting.Identity;
+﻿using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
 using Invoisys.Infrastructure.CrossCutting.Identity.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -109,7 +109,7 @@ namespace Invoisys.Presentation.Web.Controllers
                 }
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url?.Scheme);
-                //await _userManager.SendEmailAsync(user.Id, "Esqueci minha senha", html);
+                await _userManager.SendEmailAsync(user.Id, "Esqueci minha senha", callbackUrl);
                 return View("ForgotPasswordConfirmation");
             }
             return View();

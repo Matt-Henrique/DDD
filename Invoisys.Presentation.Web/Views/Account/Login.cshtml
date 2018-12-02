@@ -27,7 +27,7 @@
                 <button type="submit">Entrar</button>
                 @Html.ValidationSummary("")
                 <div>
-                    <p><a href="ForgotPassword">Esqueceu sua senha?</a></p>
+                    <p><a href="@Url.Action("ForgotPassword", "Account")">Esqueceu sua senha?</a></p>
                 </div>
             </form>
         </div>

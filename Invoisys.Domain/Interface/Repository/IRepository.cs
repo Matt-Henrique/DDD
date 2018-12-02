@@ -9,7 +9,7 @@ namespace Invoisys.Domain.Interface.Repository
         void Add(TEntity obj);
         void Delete(TEntity obj);
         void Edit(TEntity obj);
-        TEntity GetById(int Id);
+        TEntity GetById(int id);
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> exp);
         IQueryable<TEntity> Get();

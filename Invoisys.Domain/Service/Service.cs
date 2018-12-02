@@ -37,9 +37,9 @@ namespace Invoisys.Domain.Service
         {
             return _repository.GetAll();
         }
-        public TEntity GetById(int Id)
+        public TEntity GetById(int id)
         {
-            return _repository.GetById(Id);
+            return _repository.GetById(id);
         }
     }
 }

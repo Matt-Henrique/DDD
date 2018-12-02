@@ -10,10 +10,6 @@ namespace Invoisys.Domain.Entity
         public int Id { get; protected set; }
         public DateTime CreateDate { get; protected set; }
         public DateTime? ModifyDate { get; protected set; }
-        protected EntityBase()
-        {
-
-        }
         public void SetCreated()
         {
             CreateDate = DateTime.Now;
