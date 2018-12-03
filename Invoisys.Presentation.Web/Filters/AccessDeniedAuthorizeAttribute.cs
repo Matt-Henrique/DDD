@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Web.Mvc;
 
-namespace Invoisys.Infrastructure.CrossCutting.Identity.AccessDenied
+namespace Invoisys.Presentation.Web.Filters
 {
     public class AccessDeniedAuthorizeAttribute : AuthorizeAttribute
     {

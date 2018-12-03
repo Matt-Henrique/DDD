@@ -1,6 +1,6 @@
 ﻿using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
-using Invoisys.Infrastructure.CrossCutting.Identity.AccessDenied;
 using Invoisys.Infrastructure.CrossCutting.Identity.Model;
+using Invoisys.Presentation.Web.Filters;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace Invoisys.Presentation.Web.Controllers
         {
             var user = new RegisterViewModel
             {
-                RolesList = _roleManager.Roles.ToList().Select(x => new SelectListItem()
+                RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem()
                 {
                     Text = x.Name,
                     Value = x.Name
@@ -43,7 +43,7 @@ namespace Invoisys.Presentation.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Create(RegisterViewModel model, params string[] selectedRole)
         {
-            model.RolesList = _roleManager.Roles.ToList().Select(x => new SelectListItem() { Text = x.Name, Value = x.Name });
+            model.RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem() { Text = x.Name, Value = x.Name });
             if (!ModelState.IsValid) return View(model);
             model.Password = _userManager.PasswordDefault();
             var user = new ApplicationUser { ChangePassword = true, EmailConfirmed = true, Name = model.Name.Trim(), UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
@@ -81,7 +81,7 @@ namespace Invoisys.Presentation.Web.Controllers
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                RolesList = _roleManager.Roles.ToList().Select(x => new SelectListItem()
+                RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem()
                 {
                     Selected = userRoles.Contains(x.Name),
                     Text = x.Name,
@@ -95,7 +95,7 @@ namespace Invoisys.Presentation.Web.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "PhoneNumber,Email,Name,Id")] UsersRoleViewModel editUser, params string[] selectedRole)
         {
             var userRoles = await _userManager.GetRolesAsync(editUser.Id);
-            editUser.RolesList = _roleManager.Roles.ToList().Select(x => new SelectListItem()
+            editUser.RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem()
             {
                 Selected = userRoles.Contains(x.Name),
                 Text = x.Name,

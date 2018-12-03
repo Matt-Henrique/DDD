@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 
 namespace Invoisys.Infrastructure.CrossCutting.Identity.Model
 {
@@ -20,6 +19,6 @@ namespace Invoisys.Infrastructure.CrossCutting.Identity.Model
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         [Display(Name = "Perfis")]
-        public IEnumerable<SelectListItem> RolesList { get; set; }
+        public IEnumerable<DropDownListItem> RolesList { get; set; }
     }
 }

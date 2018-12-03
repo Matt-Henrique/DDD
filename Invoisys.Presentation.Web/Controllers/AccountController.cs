@@ -109,11 +109,6 @@ namespace Invoisys.Presentation.Web.Controllers
             return View();
         }
         [AllowAnonymous]
-        public ActionResult SessionExpired()
-        {
-            return View();
-        }
-        [AllowAnonymous]
         public ActionResult ResetPassword(string userId, string code)
         {
             if (userId == null)

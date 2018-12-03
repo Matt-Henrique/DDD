@@ -1,6 +1,6 @@
-﻿using Invoisys.Infrastructure.CrossCutting.Identity.AccessDenied;
-using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
+﻿using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
 using Invoisys.Infrastructure.CrossCutting.Identity.Model;
+using Invoisys.Presentation.Web.Filters;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
