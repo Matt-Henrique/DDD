@@ -12,7 +12,7 @@ namespace Invoisys.AppService
     {
         private readonly IService<TEntity> _serviceApp;
         private readonly IUoW _uow;
-        public AppService(IService<TEntity> serviceApp, IUoW uow)
+        protected AppService(IService<TEntity> serviceApp, IUoW uow)
         {
             _serviceApp = serviceApp;
             _uow = uow;
@@ -50,7 +50,7 @@ namespace Invoisys.AppService
             GC.SuppressFinalize(this);
             _uow.Dispose();
         }
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposing) return;
             _uow?.Dispose();

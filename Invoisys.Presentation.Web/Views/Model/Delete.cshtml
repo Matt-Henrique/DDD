@@ -1,0 +1,54 @@
+﻿@model Invoisys.Presentation.Web.ViewModels.ModelViewModel
+@{
+    ViewBag.Title = "Excluir Model";
+}
+<div>
+    <div>
+        <h2>Exclusão de <strong>Models</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Model")">Models</a>
+                </li>
+                <li>Excluir Model</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <div>
+                    <h3><strong>Dados do Model</strong></h3>
+                </div>
+                <div>
+                    <div>
+                        <h4>Você tem certeza que deseja excluir o model: <b>@Html.DisplayFor(m => m.Name)</b></h4>
+                        <hr />
+                    </div>
+                </div>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <div>
+                            <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "Model")'">Cancelar</button>
+                            <input id="btnExcluir" type="submit" value="Excluir" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script language="javascript" type="text/javascript">
+        $("form").submit(function () {
+            document.getElementById('btnExcluir').disabled = 1;
+        });
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

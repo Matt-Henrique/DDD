@@ -36,12 +36,9 @@ namespace Invoisys.Presentation.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    if (user.ChangePassword)
-                    {
-                        var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-                        return RedirectToAction("SilentLogOff", new { userId = user.Id, code });
-                    }
-                    return RedirectToLocal(returnUrl);
+                    if (!user.ChangePassword) return RedirectToLocal(returnUrl);
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+                    return RedirectToAction("SilentLogOff", new { userId = user.Id, code });
                 case SignInStatus.LockedOut:
                     ModelState.AddModelError("LOGIN", @"Conta bloqueada devido ao excesso de tentativas");
                     return View(model);
@@ -57,7 +54,7 @@ namespace Invoisys.Presentation.Web.Controllers
             }
         }
         [Authorize]
-        public ActionResult ChangePassword(string userId)
+        public ActionResult ChangePassword()
         {
             var viewModel = new ChangePasswordViewModel();
             return View(viewModel);
@@ -67,27 +64,22 @@ namespace Invoisys.Presentation.Web.Controllers
         [Authorize]
         public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            var user = _userManager.FindByName(User.Identity.Name);
+            if (user == null) return View(model);
+            if (model.OldPassword == model.NewPassword)
             {
-                var user = _userManager.FindByName(User.Identity.Name);
-                if (user != null)
-                {
-                    if (model.OldPassword == model.NewPassword)
-                    {
-                        ModelState.AddModelError("", @"Coloque uma senha diferente da sua senha atual");
-                        return View(model);
-                    }
-                    var validPassword = _userManager.CheckPassword(user, model.OldPassword);
-                    if (!validPassword)
-                    {
-                        ModelState.AddModelError("", @"A senha atual está incorreta");
-                        return View(model);
-                    }
-                    _userManager.ChangePassword(user.Id, model.OldPassword, model.NewPassword);
-                    return View("ChangePasswordConfirmation");
-                }
+                ModelState.AddModelError("", @"Coloque uma senha diferente da sua senha atual");
+                return View(model);
             }
-            return View(model);
+            var validPassword = _userManager.CheckPassword(user, model.OldPassword);
+            if (!validPassword)
+            {
+                ModelState.AddModelError("", @"A senha atual está incorreta");
+                return View(model);
+            }
+            _userManager.ChangePassword(user.Id, model.OldPassword, model.NewPassword);
+            return View("ChangePasswordConfirmation");
         }
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -99,20 +91,17 @@ namespace Invoisys.Presentation.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View();
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
-                {
-                    ModelState.AddModelError("", @"E-mail não encontrado");
-                    return View();
-                }
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url?.Scheme);
-                await _userManager.SendEmailAsync(user.Id, "Esqueci minha senha", callbackUrl);
-                return View("ForgotPasswordConfirmation");
+                ModelState.AddModelError("", @"E-mail não encontrado");
+                return View();
             }
-            return View();
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url?.Scheme);
+            await _userManager.SendEmailAsync(user.Id, "Esqueci minha senha", callbackUrl);
+            return View("ForgotPasswordConfirmation");
         }
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
@@ -140,13 +129,11 @@ namespace Invoisys.Presentation.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            if (!ModelState.IsValid) return View(model);
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return View(model);
-            if (user.ChangePassword)
-                user.ChangePassword = false;
+            if (user.ChangePassword) user.ChangePassword = false;
             var result = await _userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
@@ -186,8 +173,7 @@ namespace Invoisys.Presentation.Web.Controllers
         {
             foreach (var error in result.Errors)
             {
-                if (error.EndsWith("Invalid token."))
-                    ModelState.AddModelError("", @"Token inválido");
+                if (error.EndsWith("Invalid token.")) ModelState.AddModelError("", @"Token inválido");
             }
         }
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;

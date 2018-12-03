@@ -26,15 +26,10 @@ namespace Invoisys.Infrastructure.Data.UoW
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
+                if (disposing) _context.Dispose();
             _disposed = true;
         }
     }

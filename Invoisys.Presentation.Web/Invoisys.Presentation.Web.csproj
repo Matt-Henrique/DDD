@@ -232,13 +232,16 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ModelController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
+    <Compile Include="DTO\ModelDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ModelViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -264,6 +267,10 @@
     <Content Include="Views\UsersAdmin\Create.cshtml" />
     <Content Include="Views\UsersAdmin\Delete.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Model\Create.cshtml" />
+    <Content Include="Views\Model\Delete.cshtml" />
+    <Content Include="Views\Model\Edit.cshtml" />
+    <Content Include="Views\Model\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -275,9 +282,16 @@
     <Folder Include="App_Data\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Scripts\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Invoisys.AppService\Invoisys.AppService.csproj">
+      <Project>{77B317DD-9ECB-4C43-8C49-7E0BCBFD78CB}</Project>
+      <Name>Invoisys.AppService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Invoisys.Domain\Invoisys.Domain.csproj">
+      <Project>{0326638A-6EE2-4E86-9999-7C642AEB5C4B}</Project>
+      <Name>Invoisys.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Invoisys.Infrastructure.CrossCutting.Identity\Invoisys.Infrastructure.CrossCutting.Identity.csproj">
       <Project>{6008A047-BF22-4768-A38A-5B121F9AE456}</Project>
       <Name>Invoisys.Infrastructure.CrossCutting.Identity</Name>

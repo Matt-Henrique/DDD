@@ -41,6 +41,17 @@
                                     </li>
                                 }
                             }
+                            @{
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="#"><span>Model</span></a>
+                                        <ul>
+                                            <li><a href="@Url.Action("Index", "Model")"> Models</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                            }
                         </ul>
                     }
                 }
@@ -64,7 +75,7 @@
                                 <a href="#"><span>@User.Identity.Name</span></a>
                                 <ul>
                                     <li><a href="@Url.Action("ChangePassword", "Account")"><span>Alterar Senha</span></a></li>
-                                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><span>Sair</span></a></li>
+                                    <li><a href="javascript:$('#logoutForm').submit()"><span>Sair</span></a></li>
                                 </ul>
                             </li>
                         </ul>

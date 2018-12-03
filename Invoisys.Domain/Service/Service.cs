@@ -9,7 +9,7 @@ namespace Invoisys.Domain.Service
     public class Service<TEntity> : IService<TEntity> where TEntity : class
     {
         private readonly IRepository<TEntity> _repository;
-        public Service(IRepository<TEntity> repository)
+        protected Service(IRepository<TEntity> repository)
         {
             _repository = repository;
         }

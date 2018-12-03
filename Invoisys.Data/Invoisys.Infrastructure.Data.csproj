@@ -54,9 +54,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\InvoisysContext.cs" />
+    <Compile Include="EntityConfig\ModelConfig.cs" />
     <Compile Include="EntityConfig\UserConfig.cs" />
+    <Compile Include="Migrations\201812030043499_Model.cs" />
+    <Compile Include="Migrations\201812030043499_Model.Designer.cs">
+      <DependentUpon>201812030043499_Model.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\ModelRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="UoW\UoW.cs" />
   </ItemGroup>
@@ -73,6 +79,11 @@
       <Project>{931A9C52-575B-430E-B244-6485136519BC}</Project>
       <Name>Invoisys.Infrastructure.CrossCutting.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201812030043499_Model.resx">
+      <DependentUpon>201812030043499_Model.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

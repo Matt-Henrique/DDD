@@ -37,7 +37,7 @@
                         <div>
                             <table id="tblUsers" style="width: 100%;">
                                 <thead>
-                                    <tr>
+                                    <tr style="text-align: left;">
                                         <th>E-MAIL</th>
                                         <th></th>
                                     </tr>
@@ -48,7 +48,7 @@
                                         <tr>
                                             <td>@item.UserName</td>
                                             <td>
-                                                <a href="@Url.Action("Details", "UsersAdmin", new { id = (item.Id) })">Detalhes</a>
+                                                <a href="@Url.Action("Edit", "UsersAdmin", new { id = (item.Id) })">Editar</a>
                                             </td>
                                         </tr>
                                     }

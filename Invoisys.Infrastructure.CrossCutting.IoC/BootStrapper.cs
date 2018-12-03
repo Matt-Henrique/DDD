@@ -1,8 +1,14 @@
-﻿using Invoisys.Domain.Interface.UoW;
+﻿using Invoisys.AppService;
+using Invoisys.AppService.Interface;
+using Invoisys.Domain.Interface.Repository;
+using Invoisys.Domain.Interface.Service;
+using Invoisys.Domain.Interface.UoW;
+using Invoisys.Domain.Service;
 using Invoisys.Infrastructure.CrossCutting.Identity.Configuration;
 using Invoisys.Infrastructure.CrossCutting.Identity.Context;
 using Invoisys.Infrastructure.CrossCutting.Identity.Model;
 using Invoisys.Infrastructure.Data.Context;
+using Invoisys.Infrastructure.Data.Repository;
 using Invoisys.Infrastructure.Data.UoW;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -25,6 +31,9 @@ namespace Invoisys.Infrastructure.CrossCutting.IoC
 
             //Invoisys Domain register
             container.Register<InvoisysContext>(new WebRequestLifestyle());
+            container.Register<IModelRepository, ModelRepository>(new WebRequestLifestyle());
+            container.Register<IModelService, ModelService>(new WebRequestLifestyle());
+            container.Register<IModelAppService, ModelAppService>(new WebRequestLifestyle());
             container.Register<IUoW, UoW>(new WebRequestLifestyle());
         }
     }

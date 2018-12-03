@@ -1,0 +1,67 @@
+﻿@model Invoisys.Presentation.Web.ViewModels.ModelViewModel
+@{
+    ViewBag.Title = "Editar Model";
+}
+<div>
+    <div>
+        <h2>Edição de <strong>Model</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Model")">Models</a>
+                </li>
+                <li>Editar Model</li>
+            </ol>
+        </div>
+    </div>
+    @using (Html.BeginForm("Edit", "Model", null, FormMethod.Post, new { id = "formModel", role = "form", onsubmit = "return disabledButton();" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div>
+                <h3><strong>Dados do Model</strong></h3>
+            </div>
+            <div>
+                <div>
+                    <div>
+                        <input id="Id" name="Id" type="hidden" value="@Invoisys.Infrastructure.CrossCutting.Util.EncodedActionLinkExtensions.Encrypt(Model.Id)">
+                    </div>
+                    <div>
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new {placeholder = "Nome", required = "required", maxlength = "100", minlength = "1"})
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button id="btnCancelar" form="none" onclick="location.href='@Url.Action("Index", "Model")'">Cancelar</button>
+                    <input id="btnSalvar" type="submit" value="Salvar" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <script>
+        function disabledButton() {
+            $("#btnSalvar").prop("disabled", "disabled");
+            setTimeout(function () { $("#btnSalvar").prop("disabled", ""); }, 5000);
+        }
+        @if (ViewData.ModelState.Values.Select(m => m.Errors).Any())
+        {
+            foreach (var erro in ViewData.ModelState.Values.Select(m => m.Errors).Where(e => e.Count > 0).ToArray())
+            {
+                <text>
+                    setTimeout(function () {
+                        alert(@Html.Raw(Json.Encode(erro[0].ErrorMessage)));
+                    }, 100);
+                </text>
+            }
+        }
+    </script>
+    <!-- END PAGE SCRIPTS -->
+}

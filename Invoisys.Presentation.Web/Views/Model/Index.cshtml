@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Invoisys.Presentation.Web.DTO.ModelDTO>
+@{
+    ViewBag.Title = "Models";
+}
+<div>
+    <div>
+        <h2>Listagem de <strong>Models</strong></h2>
+        <div>
+            <ol>
+                <li>
+                    <a href="@Url.Action("Index", "Home")">Home</a>
+                </li>
+                <li>Models</li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <h3>
+                    <strong>Gerenciamento de </strong>Model
+                </h3>
+                <div>
+                    <button type="button" title="Novo" onclick="location.href='@Url.Action("Create", "Model")'">Novo</button>
+                    <button type="button" title="Excluir Tudo" onclick="location.href='@Url.Action("DeleteAll", "Model")'">Excluir Tudo</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table id="tblModel" style="width: 100%;">
+                <thead>
+                    <tr style="text-align: left;">
+                        <th>NOME</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Model")?q=@item.IdCripto">Editar</a>
+                                <a href="@Url.Action("Delete", "Model")?q=@item.IdCripto">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!-- BEGIN PAGE SCRIPTS -->
+    <!-- END PAGE SCRIPTS -->
+}

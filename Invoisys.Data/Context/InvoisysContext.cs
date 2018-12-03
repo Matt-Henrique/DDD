@@ -15,9 +15,11 @@ namespace Invoisys.Infrastructure.Data.Context
             ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 360;
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Model> Models { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new UserConfig());
+            modelBuilder.Configurations.Add(new ModelConfig());
             modelBuilder.Ignore<User>();
             modelBuilder.Properties()
                 .Where(p => p.Name == p.ReflectedType?.Name + "Id")

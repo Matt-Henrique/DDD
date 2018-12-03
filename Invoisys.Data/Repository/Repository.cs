@@ -9,8 +9,8 @@ namespace Invoisys.Infrastructure.Data.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        public InvoisysContext Context { get; set; }
-        public Repository(InvoisysContext context)
+        protected InvoisysContext Context { get; set; }
+        protected Repository(InvoisysContext context)
         {
             Context = context;
         }

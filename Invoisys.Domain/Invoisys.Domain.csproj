@@ -49,12 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Model.cs" />
     <Compile Include="Entity\EntityBase.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Interface\Repository\IModelRepository.cs" />
     <Compile Include="Interface\Repository\IRepository.cs" />
+    <Compile Include="Interface\Service\IModelService.cs" />
     <Compile Include="Interface\UoW\IUoW.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interface\Service\IService.cs" />
+    <Compile Include="Service\ModelService.cs" />
     <Compile Include="Service\Service.cs" />
   </ItemGroup>
   <ItemGroup />
