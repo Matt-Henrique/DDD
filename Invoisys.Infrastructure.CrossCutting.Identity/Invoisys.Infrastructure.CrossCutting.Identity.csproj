@@ -82,9 +82,9 @@
     <Compile Include="Configuration\EmailService.cs" />
     <Compile Include="Context\ApplicationDbContext.cs" />
     <Compile Include="EntityConfig\ApplicationUserConfig.cs" />
-    <Compile Include="Migrations\201812020314276_Identity.cs" />
-    <Compile Include="Migrations\201812020314276_Identity.Designer.cs">
-      <DependentUpon>201812020314276_Identity.cs</DependentUpon>
+    <Compile Include="Migrations\201812040137573_Identity.cs" />
+    <Compile Include="Migrations\201812040137573_Identity.Designer.cs">
+      <DependentUpon>201812040137573_Identity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DropDownListItem.cs" />
@@ -107,8 +107,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812020314276_Identity.resx">
-      <DependentUpon>201812020314276_Identity.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201812040137573_Identity.resx">
+      <DependentUpon>201812040137573_Identity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

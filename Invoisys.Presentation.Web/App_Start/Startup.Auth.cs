@@ -14,7 +14,7 @@ namespace Invoisys.Presentation.Web
     public partial class Startup
     {
         public static IDataProtectionProvider DataProtectionProvider { get; set; }
-        public void ConfigureAuth(IAppBuilder app)
+        private static void ConfigureAuth(IAppBuilder app)
         {
             app.CreatePerOwinContext(() => DependencyResolver.Current.GetService<ApplicationUserManager>());
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -23,9 +23,8 @@ namespace Invoisys.Presentation.Web
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-                        validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>
+                        (TimeSpan.FromMinutes(30), (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);

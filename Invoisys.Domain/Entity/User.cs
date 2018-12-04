@@ -23,9 +23,5 @@ namespace Invoisys.Domain.Entity
         {
             Id = Guid.NewGuid().ToString();
         }
-        public void DisableLockout()
-        {
-            LockoutEnabled = false;
-        }
     }
 }

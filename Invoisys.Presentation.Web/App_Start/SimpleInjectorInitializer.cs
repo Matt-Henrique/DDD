@@ -21,9 +21,7 @@ namespace Invoisys.Presentation.Web.App_Start
             container.Register(() =>
             {
                 if (HttpContext.Current != null && HttpContext.Current.Items["owin.Environment"] == null && container.IsVerifying)
-                {
                     return new OwinContext().Authentication;
-                }
                 return HttpContext.Current.GetOwinContext().Authentication;
             }, new WebRequestLifestyle());
             container.RegisterMvcControllers(Assembly.GetExecutingAssembly());

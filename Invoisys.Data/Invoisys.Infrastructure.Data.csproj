@@ -49,9 +49,9 @@
     <Compile Include="Context\InvoisysContext.cs" />
     <Compile Include="EntityConfig\ModelConfig.cs" />
     <Compile Include="EntityConfig\UserConfig.cs" />
-    <Compile Include="Migrations\201812030043499_Model.cs" />
-    <Compile Include="Migrations\201812030043499_Model.Designer.cs">
-      <DependentUpon>201812030043499_Model.cs</DependentUpon>
+    <Compile Include="Migrations\201812040138554_Model.cs" />
+    <Compile Include="Migrations\201812040138554_Model.Designer.cs">
+      <DependentUpon>201812040138554_Model.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,8 +74,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812030043499_Model.resx">
-      <DependentUpon>201812030043499_Model.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201812040138554_Model.resx">
+      <DependentUpon>201812040138554_Model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
