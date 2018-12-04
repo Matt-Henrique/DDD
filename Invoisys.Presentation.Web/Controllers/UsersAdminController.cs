@@ -39,11 +39,12 @@ namespace Invoisys.Presentation.Web.Controllers
             return View(user);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RegisterViewModel model, params string[] selectedRole)
         {
-            model.RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem() { Text = x.Name, Value = x.Name });
+            var role = selectedRole;
+            model.RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem() { Selected = role.Contains(x.Name), Text = x.Name, Value = x.Name });
             if (!ModelState.IsValid) return View(model);
             model.Password = _userManager.PasswordDefault();
             var user = new ApplicationUser { ChangePassword = true, EmailConfirmed = true, Name = model.Name.Trim(), UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
@@ -90,8 +91,8 @@ namespace Invoisys.Presentation.Web.Controllers
             });
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "PhoneNumber,Email,Name,Id")] UsersRoleViewModel editUser, params string[] selectedRole)
         {
             var userRoles = await _userManager.GetRolesAsync(editUser.Id);
@@ -113,6 +114,7 @@ namespace Invoisys.Presentation.Web.Controllers
             var result = await _userManager.AddToRolesAsync(user.Id, selectedRole.Except(userRoles).ToArray());
             if (!result.Succeeded)
             {
+                editUser.RolesList = _roleManager.Roles.ToList().Select(x => new DropDownListItem() { Selected = selectedRole.Contains(x.Name), Text = x.Name, Value = x.Name });
                 AddErrors(result);
                 return View(editUser);
             }
@@ -128,9 +130,10 @@ namespace Invoisys.Presentation.Web.Controllers
             if (user == null) return HttpNotFound();
             return View(user);
         }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         [Authorize]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
             if (!ModelState.IsValid) return View();
